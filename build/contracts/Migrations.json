@@ -1371,12 +1371,12 @@
     "5776": {
       "events": {},
       "links": {},
-      "address": "0x9292510f2117E01773d4Ef942DB8F73cf9bb223B",
-      "transactionHash": "0x29fd45ad121c63de87f146d15d14bb881146595012bf039b7ca1dcab2be26231"
+      "address": "0xB5beBDe17838Da517a91aC324d56e4865A75E928",
+      "transactionHash": "0xa7124c2b8ddacf35d2b17e3c5925f920a415396708d6e9fe32f4f4e3bc33d178"
     }
   },
   "schemaVersion": "3.0.10",
-  "updatedAt": "2019-06-15T09:35:59.217Z",
+  "updatedAt": "2019-06-15T12:51:59.756Z",
   "devdoc": {
     "methods": {}
   },

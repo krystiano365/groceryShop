@@ -21,6 +21,8 @@ contract Shop {
         addProduct("tomato", 0.1 ether, owner, 250);
     }
 
+    event boughtEvent();
+
     function addProduct(string memory _name, uint256 _price, address payable _owner, uint256 _quantity) public {
         products[idCounter] = Product(idCounter, _name, _owner, _price, _quantity);
         idCounter++;
@@ -32,15 +34,17 @@ contract Shop {
         require(msg.value >= product.price, "not enough funds");
         uint256 quantityToBuy = msg.value / product.price;
 
-        if (quantityToBuy <= product.quantity) {
-            uint256 change = msg.value % product.price;
-            uint256 valueToSend = msg.value - change;
-            require(valueToSend == product.price * quantityToBuy, "value doesn't match");
+        require(quantityToBuy <= product.quantity, "not enough products in stock");
+        uint256 change = msg.value % product.price;
+        uint256 valueToSend = msg.value - change;
+        
+        require(valueToSend == product.price * quantityToBuy, "value doesn't match");
 
-            products[_productId].quantity = product.quantity - quantityToBuy;
-            product.owner.transfer(valueToSend);
-            msg.sender.transfer(change);
-        }
+        products[_productId].quantity = product.quantity - quantityToBuy;
+        product.owner.transfer(valueToSend);
+        msg.sender.transfer(change);
+        emit boughtEvent();
+        
         //return quantityToBuy;
 
 

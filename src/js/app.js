@@ -21,6 +21,18 @@ App = {
     return App.initContract();
   },
 
+  checkIfConnectedAndRender: function() {
+    web3.eth.getAccounts(function(err, accounts){
+      if (err != null) console.error("An error occurred: "+err);
+      else if (accounts.length == 0) {
+        $("#content").hide();
+        $("#loader").hide();
+        $("#login").show();
+      }
+      else return App.render();
+    });
+  },
+
   initContract: function() {
     $.getJSON("Shop.json", function(shop) {
       // Instantiate a new truffle contract from the artifact
@@ -28,32 +40,25 @@ App = {
       // Connect provider to interact with contract
       App.contracts.Shop.setProvider(App.web3Provider);
       //App.listenForEvents();
-      web3.eth.getAccounts(function(err, accounts){
-        if (err != null) console.error("An error occurred: "+err);
-        else if (accounts.length == 0) {
-          $("#content").hide();
-          $("#loader").hide();
-          $("#login").show();
-        }
-        else return App.render();
-    })
-        
+      App.checkIfConnectedAndRender();
     });
+        
+    
   },
 
   // Listen for events emitted from the contract
   listenForEvents: function() {
-    // App.contracts.Shop.deployed().then(function(instance) {
+    App.contracts.Shop.deployed().then(function(instance) {
 
-    //   instance.votedEvent({}, {
-    //     fromBlock: 0,
-    //     toBlock: 'latest'
-    //   }).watch(function(error, event) {
-    //     console.log("event triggered", event)
-    //     // Reload when a new vote is recorded
-    //     App.render();
-    //   });
-    // });
+      instance.boughtEvent({}, {
+        fromBlock: 0,
+        toBlock: 'latest'
+      }).watch(function(error, event) {
+        console.log("event triggered", event)
+        // Reload when a new vote is recorded
+        App.checkIfConnectedAndRender();
+      });
+    });
   },
 
   render: function() {
@@ -68,11 +73,9 @@ App = {
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
-      if (err === null && account !== null) {
+      if (err === null) {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
-      } else {
-        
       }
     })
 
@@ -95,13 +98,14 @@ App = {
           var price = product[3];
           var quantity = product[4];
           
+          price = price / 1000000000000000000;
 
           // Render product Result
           var productTemplate = "<tr><th>" + id + "</th><td>" + name + "</td><td>" + owner + "</td><td>" + price + "</td><td>" + quantity + "</td></tr>"
           productsResults.append(productTemplate);
 
           // Render product ballot option
-          var productOption = "<option value='" + id + "' >" + name + "</ option>"
+          var productOption = "<option value='" + id + "' >"+ name + " - " + price + " eth" + "</ option>"
           productSelect.append(productOption);
         });
       }
@@ -121,24 +125,26 @@ App = {
     //console.log(contractAddress);
 
 
-    var shopinstance;
+    var productInstance;
 
     App.contracts.Shop.deployed().then(function(instance) {
-      shopinstance = instance;
+      productInstance = instance.products(productId);
       return instance.buyProduct(productId, { from: App.account, gas: 6721975, value: amountToSend });
     }).then(function(result) {
       console.log(JSON.stringify(result));
       // Wait for votes to update
       //console.log(shopinstance.products(productId));
-      result.receipt.productName = candidateInfo[0];
-      result.receipt.productPrice = candidateInfo[1];
-      const d = new Date();
-      result.receipt.transactionTime = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()} UTC+${d.getTimezoneOffset()/(-60)}`; 
-      sendLog(result.receipt);
+      App.checkIfConnectedAndRender();
       $("#content").hide();
       $("#loader").show();
       $("#login").hide();
-      App.render();
+
+
+      result.receipt.productName = productInstance[0];
+      result.receipt.productPrice = productInstance[1];
+      const d = new Date();
+      result.receipt.transactionTime = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()} UTC+${d.getTimezoneOffset()/(-60)}`; 
+      sendLog(result.receipt);
     }).catch(function(err) {
       console.error(err);
     });
