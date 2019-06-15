@@ -17,6 +17,8 @@ contract Shop {
 
     constructor() Shop() public {
         addProduct("applejuice", 0.44 ether, owner, 10);
+        addProduct("apple", 0.05 ether, owner, 100);
+        addProduct("tomato", 0.1 ether, owner, 250);
     }
 
     function addProduct(string memory _name, uint256 _price, address payable _owner, uint256 _quantity) public {

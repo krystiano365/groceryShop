@@ -28,8 +28,8 @@
           </button>
           <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
-              <a class="nav-item nav-link" href="shop.html">Shop</a>
+              <a class="nav-item nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+              <a class="nav-item nav-link active" href="">Shop</a>
               <a class="nav-item nav-link" href="explorer.html">Transaction Explorer</a>
             </div>
           </div>
@@ -39,6 +39,47 @@
     <div class="card">
       <div class="container" style="width: 650px;">
         
+        <div class="row">
+          <div class="col-lg-12">
+            <h1 class="text-center">Grocery online shop</h1>
+            <hr/>
+            <br/>
+            <div id="loader">
+              <p class="text-center">Loading...</p>
+            </div>
+            <div id="login">
+              <p class="text-center">Connect to your Web3 provider</p>
+            </div>
+            <div id="content" style="display: none;">
+              <table class="table">
+                <thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Owner</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <!-- <img src="/images/logo.png"  style="position:absolute; top:-30px; left:-200px; width:200px; height:200px"  > -->
+                  </tr>
+                  
+                </thead>
+                <tbody id="productsResults">
+                </tbody>
+              </table>
+              <hr/>
+              <form onSubmit="App.buyProduct(); return false;">
+                <div class="form-group">
+                  <label for="productSelect">Select product</label>
+                  <select class="form-control" id="productSelect">
+                  </select>
+                </div>
+                <button type="submit" class="btn btn-primary">Buy</button>
+                <hr />
+              </form> 
+              <p id="accountAddress" class="text-center"></p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
 

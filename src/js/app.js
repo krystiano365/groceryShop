@@ -27,10 +27,17 @@ App = {
       App.contracts.Shop = TruffleContract(shop);
       // Connect provider to interact with contract
       App.contracts.Shop.setProvider(App.web3Provider);
-
       //App.listenForEvents();
-
-      return App.render();
+      web3.eth.getAccounts(function(err, accounts){
+        if (err != null) console.error("An error occurred: "+err);
+        else if (accounts.length == 0) {
+          $("#content").hide();
+          $("#loader").hide();
+          $("#login").show();
+        }
+        else return App.render();
+    })
+        
     });
   },
 
@@ -53,17 +60,21 @@ App = {
     var shopInstance;
     var loader = $("#loader");
     var content = $("#content");
+    var login = $("#login");
 
     loader.show();
     content.hide();
+    login.hide();
 
     // Load account data
     web3.eth.getCoinbase(function(err, account) {
-      if (err === null) {
+      if (err === null && account !== null) {
         App.account = account;
         $("#accountAddress").html("Your Account: " + account);
+      } else {
+        
       }
-    });
+    })
 
     // Load contract data
     App.contracts.Shop.deployed().then(function(instance) {
@@ -94,9 +105,10 @@ App = {
           productSelect.append(productOption);
         });
       }
-      //return shopInstance.voters(App.account);
+      // return shopInstance.products(App.account);
       loader.hide();
       content.show();
+      login.hide();
     }).catch(function(error) {
       console.warn(error);
     });
@@ -125,7 +137,8 @@ App = {
       sendLog(result.receipt);
       $("#content").hide();
       $("#loader").show();
-      return App.render();
+      $("#login").hide();
+      App.render();
     }).catch(function(err) {
       console.error(err);
     });
