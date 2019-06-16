@@ -1,4 +1,4 @@
-const server = 'http://localhost:8000/';
+// const server = 'http://localhost:8000/';
 
 const requestLogs = () => {
     const query = document.getElementById('query').value;

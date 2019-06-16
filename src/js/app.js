@@ -22,11 +22,12 @@ App = {
   },
 
   checkIfConnectedAndRender: function() {
+    console.log("hello it is checkIfconnected()");
     web3.eth.getAccounts(function(err, accounts){
       if (err != null) console.error("An error occurred: "+err);
       else if (accounts.length == 0) {
         $("#content").hide();
-        $("#loader").hide();
+        $("#loader").show();
         $("#login").show();
       }
       else return App.render();
@@ -62,6 +63,7 @@ App = {
   },
 
   render: function() {
+    console.log("hello it is render()");
     var shopInstance;
     var loader = $("#loader");
     var content = $("#content");
@@ -118,18 +120,18 @@ App = {
     });
   },
 
+
   buyProduct: function() {
+    console.log("hello it is buyProduct()");
+
     var productId = $('#productSelect').val();
+    var quantityToBuy = $('#quantitySelect').val();
+    const candidateInfo = $( "#productSelect option:selected" ).text().split(' - ');
+    const amount = parseFloat(candidateInfo[1]) * quantityToBuy;
 
-    const amountToSend = web3.toWei(1, "ether"); 
-    //console.log(contractAddress);
-
-
-    var productInstance;
-
+    
     App.contracts.Shop.deployed().then(function(instance) {
-      productInstance = instance.products(productId);
-      return instance.buyProduct(productId, { from: App.account, gas: 6721975, value: amountToSend });
+      return instance.buyProduct(productId, quantityToBuy, { from: App.account, gas: 6721975, value: web3.toWei(amount, "ether") });
     }).then(function(result) {
       console.log(JSON.stringify(result));
       // Wait for votes to update
@@ -138,21 +140,46 @@ App = {
       $("#content").hide();
       $("#loader").show();
       $("#login").hide();
-
-
-      result.receipt.productName = productInstance[0];
-      result.receipt.productPrice = productInstance[1];
+      result.receipt.productName = candidateInfo[0];
+      result.receipt.productPrice = candidateInfo[1];
       const d = new Date();
       result.receipt.transactionTime = `${d.getDate()}.${d.getMonth() + 1}.${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}:${d.getSeconds()} UTC+${d.getTimezoneOffset()/(-60)}`; 
       sendLog(result.receipt);
-    }).catch(function(err) {
+    })
+    .catch(function(err) {
       console.error(err);
     });
-  }
+  },
+
+
+
 };
+
+
+$(document).on('click', '.number-spinner button', function () {    
+  var btn = $(this),
+    oldValue = btn.closest('.number-spinner').find('input').val().trim(),
+    newVal = 0;
+  
+  if (btn.attr('data-dir') == 'up') {
+    newVal = parseInt(oldValue) + 1;
+  } else {
+    if (oldValue > 1) {
+      newVal = parseInt(oldValue) - 1;
+    } else {
+      newVal = 1;
+    }
+  }
+  btn.closest('.number-spinner').find('input').val(newVal);
+
+  return false;
+});
+
 
 $(function() {
   $(window).load(function() {
     App.init();
   });
 });
+
+

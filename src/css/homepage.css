@@ -1,13 +1,8 @@
-.bg {
-    background-image: url("background.png");
-  
-    height: 100%;
-  
-    /* background-position: center;
-    background-repeat: no-repeat; */
-    background-size: cover; 
-  }
-
 .card {
   position:absolute; width:75%; left: 0; right: 0; margin-left: auto; margin-right: auto; margin-top: 20px;
+}
+
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
 }

@@ -18,10 +18,12 @@
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body class="bg">
+  <body>
+      
+      
 
     <div>
-      <nav class="navbar navbar-expand-lg navbar navbar-dark bg-primary">
+      <nav class="navbar fixed-top navbar-expand-lg navbar navbar-dark bg-primary">
           <a class="navbar-brand" style="font-weight: 500">D-Strict</a>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -36,10 +38,19 @@
         </nav>
     </div>
 
-    <div class="card">
-      <div class="container" style="width: 650px;">
-        
-      </div>
+   
+    <div class="jumbotron mb-0 d-flex align-items-center flex-column justify-content-center vh-100 bg-dark text-white" id="header"> 
+        <img src="d-strict.png" width="1520"> 
+        <h1 class="display-3">D-Strict Shop</h1>
+        <h3>We are here to protect your data.</h3>
+        <p></p>
+        <p>Buy on blockchain-based shop.</p>
+        <p class="lead">
+            <a class="btn btn-outline-secondary btn-lg" href="shop.html" role="button">Buy now</a>
+        </p>
+    </div>
+    <div class="col-12 text-right small">
+        @2019 D-Strict Shop
     </div>
 
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
@@ -48,8 +59,8 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/web3.min.js"></script>
     <script src="js/truffle-contract.js"></script>
-    <script src="js/explorer.js"></script>
     <script src="js/logger.js"></script>
+    <script src="js/explorer.js"></script>
     <script src="js/app.js"></script>
   </body>
 </html>

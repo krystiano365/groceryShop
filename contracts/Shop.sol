@@ -16,9 +16,12 @@ contract Shop {
     uint256 public idCounter = 0;
 
     constructor() Shop() public {
-        addProduct("applejuice", 0.44 ether, owner, 10);
-        addProduct("apple", 0.05 ether, owner, 100);
-        addProduct("tomato", 0.1 ether, owner, 250);
+        addProduct("Cola 🥤", 0.44 ether, owner, 10);
+        addProduct("Apple 🍏", 0.05 ether, owner, 100);
+        addProduct("Tomato 🍅", 0.1 ether, owner, 250);
+        addProduct("Pizza 🍕", 0.2 ether, owner, 250);
+        addProduct("Sushi 🍣", 0.15 ether, owner, 250);
+        addProduct("Coconut 🥥", 0.08 ether, owner, 250);
     }
 
     event boughtEvent();
@@ -28,18 +31,20 @@ contract Shop {
         idCounter++;
     }
 
-    function buyProduct(uint256 _productId) public payable{
+    function buyProduct(uint256 _productId, uint256 _quantity) public payable{
         Product memory product = products[_productId];
 
-        require(msg.value >= product.price, "not enough funds");
-        uint256 quantityToBuy = msg.value / product.price;
+        //require(msg.value >= product.price, "not enough funds");
+        //uint256 quantityToBuy = msg.value / product.price;
+
+        uint256 quantityToBuy = _quantity;
 
         require(quantityToBuy <= product.quantity, "not enough products in stock");
         uint256 change = msg.value % product.price;
         uint256 valueToSend = msg.value - change;
         
         require(valueToSend == product.price * quantityToBuy, "value doesn't match");
-
+        
         products[_productId].quantity = product.quantity - quantityToBuy;
         product.owner.transfer(valueToSend);
         msg.sender.transfer(change);

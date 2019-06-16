@@ -21,7 +21,6 @@ contract Election {
 
         addCandidate("person 1");
         addCandidate("person 2");
-        //addCandidate("Bromislaw Koromowski");
     }
 
     function addCandidate(string memory _name) private {
